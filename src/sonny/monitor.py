@@ -305,15 +305,16 @@ class Monitor:
             if hv['state'] == 'down' and \
                hv['service_details']['disabled_reason'] and \
                'sonny' in hv['service_details']['disabled_reason']:
-                _logger.debug(f'{hv_name} is down but alredy handled')
+                _logger.debug(f'{hv_name} is down but already handled')
+                continue
+            elif hv['status'] == 'disabled' and 'maintenance' in hv['service_details']['disabled_reason'].lower():
+                _logger.debug(f'{hv_name} is in maintenance')
                 continue
             elif hv['status'] == 'disabled' and hv['running_vms'] == 0:
                 _logger.debug(
                     f'ignoring {hv_name} (disabled and 0 running vms)')
                 continue
             elif hv['status'] == 'disabled' and hv['running_vms'] > 0:
-                if 'sonny' in hv['service_details']['disabled_reason']:
-                    continue
                 r_vms = hv['running_vms']
                 _logger.warning(
                     f'{hv_name} is disabled and running {r_vms} instances!')
