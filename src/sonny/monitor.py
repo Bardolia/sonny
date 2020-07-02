@@ -312,6 +312,8 @@ class Monitor:
                     f'ignoring {hv_name} (disabled and 0 running vms)')
                 continue
             elif hv['status'] == 'disabled' and hv['running_vms'] > 0:
+                if 'sonny' in hv['service_details']['disabled_reason']:
+                    continue
                 r_vms = hv['running_vms']
                 _logger.warning(
                     f'{hv_name} is disabled and running {r_vms} instances!')
